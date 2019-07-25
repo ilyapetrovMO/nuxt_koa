@@ -6,7 +6,8 @@
         <label>
           <input type="checkbox"
                  v-model="todo.done"
-                 v-bind:checked="todo.done">
+                 v-bind:checked="todo.done"
+                 @click="updateDone(todo.id)">
 
           <!-- <input type="checkbox"
             v-on:change="toggle(todo)"
@@ -22,7 +23,7 @@
             <span v-else :id=index :class="{ resolved: todo.done }">
             {{ todo.text }}
           </span>
-            <button v-if="todo.done == false" :id=index @click="toggleChange(index)">
+            <button v-if="todo.done == false" :id=index @click="toggleChange(index,todo)">
               change
             </button>
           </div>
@@ -34,6 +35,7 @@
     <button @click="deleteAll()">
       delete
     </button>
+    <button @click="fetchSomething2">fetch</button>
   </div>
 </template>
 
@@ -41,12 +43,7 @@
   export default {
     data() {
       return {
-        todos: [
-          {text: "Learn JavaScript", done: false},
-          {text: "Learn Vue", done: false},
-          {text: "Play around in JSFiddle", done: true},
-          {text: "Build something awesome", done: true}
-        ],
+        todos: [],
         defText: "",
         editIndex: null,
         previousState: "213",
@@ -57,14 +54,30 @@
       toggle: function (todo) {
         todo.done = !todo.done
       },
-      insertNew() {
-        this.todos.push({text: this.defText, done: false});
+      async insertNew() {
+        await this.$axios.$post('http://localhost:3001/data', JSON.stringify({
+          text: this.defText, done: false
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        this.refreshData();
       },
-      deleteAll() {
-        this.todos = this.todos.filter(todo => todo.done == false);
+      async refreshData() {
+        let { data } = await this.$axios.get('http://localhost:3001/data');
+        this.todos = data;
       },
-      toggleChange(index) {
+      async deleteAll() {
+        await this.$axios.$delete('http://localhost:3001/data');
+        //is.todos = this.todos.filter(todo => todo.done == false);
+        this.refreshData();
+      },
+      async toggleChange(index,todo) {
         if (index == this.editIndex) {
+          console.log(todo.text);
+          let myJson = {text:todo.text};
+          await this.$axios.$put('http://localhost:3001/text/'+todo.id,myJson);
           this.editIndex = null;
         } else {
           this.previousState = this.todos[index].text;
@@ -75,8 +88,26 @@
         this.todos[index].text = this.previousState;
         this.editIndex = null;
         this.todos[index].done = true;
+      },
+      async fetchSomething() {
+        let response = await this.$axios.$get('http://localhost:3001/data');
+        this.todos = response.data;
+      },
+      fetchSomething2() {
+        this.$axios
+          .get('http://localhost:3001/data')
+          .then(response => (this.todos = response.data));
+      },
+      async updateDone(id) {
+        await this.$axios.put('http://localhost:3001/data/'+id);
       }
-    }
+    },
+    mounted() {
+     this.refreshData();
+    },
+    async updated() {
+      await this.$axios.put
+    },
   }
 </script>
 
