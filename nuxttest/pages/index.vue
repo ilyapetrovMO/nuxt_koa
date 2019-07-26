@@ -7,7 +7,7 @@
           <input type="checkbox"
                  v-model="todo.done"
                  v-bind:checked="todo.done"
-                 @click="updateDone(todo.id)">
+                 @click="updateDone(todo)">
 
           <!-- <input type="checkbox"
             v-on:change="toggle(todo)"
@@ -26,6 +26,9 @@
             <button v-if="todo.done == false" :id=index @click="toggleChange(index,todo)">
               change
             </button>
+            <button v-else :id=index @click="deleteById(todo.id)">
+              delete
+            </button>
           </div>
         </label>
       </li>
@@ -33,9 +36,8 @@
     <input v-model="defText">
     <button type="button" @click="insertNew()">Create</button>
     <button @click="deleteAll()">
-      delete
+      delete all checked
     </button>
-    <button @click="fetchSomething2">fetch</button>
   </div>
 </template>
 
@@ -55,7 +57,7 @@
         todo.done = !todo.done
       },
       async insertNew() {
-        await this.$axios.$post('http://localhost:3001/data', JSON.stringify({
+        await this.$axios.$post('http://localhost:3001/todos', JSON.stringify({
           text: this.defText, done: false
         }), {
           headers: {
@@ -65,19 +67,23 @@
         this.refreshData();
       },
       async refreshData() {
-        let { data } = await this.$axios.get('http://localhost:3001/data');
+        let { data } = await this.$axios.get('http://localhost:3001/todos');
         this.todos = data;
       },
+      async deleteById(id) {
+        await this.$axios.$delete('http://localhost:3001/todos/checked/'+id);
+        this.refreshData();
+      },
       async deleteAll() {
-        await this.$axios.$delete('http://localhost:3001/data');
-        //is.todos = this.todos.filter(todo => todo.done == false);
+        await this.$axios.$delete('http://localhost:3001/todos/checked');
+        //this.todos = this.todos.filter(todo => todo.done == false);
         this.refreshData();
       },
       async toggleChange(index,todo) {
         if (index == this.editIndex) {
           console.log(todo.text);
-          let myJson = {text:todo.text};
-          await this.$axios.$put('http://localhost:3001/text/'+todo.id,myJson);
+          let myJson = todo;
+          await this.$axios.$put('http://localhost:3001/todos/'+todo.id,myJson);
           this.editIndex = null;
         } else {
           this.previousState = this.todos[index].text;
@@ -98,8 +104,10 @@
           .get('http://localhost:3001/data')
           .then(response => (this.todos = response.data));
       },
-      async updateDone(id) {
-        await this.$axios.put('http://localhost:3001/data/'+id);
+      async updateDone(todo) {
+        todo.done = !todo.done;
+        let myJson = todo;
+        await this.$axios.$put('http://localhost:3001/todos/'+todo.id,myJson);
       }
     },
     mounted() {

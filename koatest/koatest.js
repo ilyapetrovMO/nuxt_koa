@@ -27,17 +27,17 @@ router.param('id',(key, ctx, next) => {
 
 router
   .get('/',index)
-  .get('/data',getData)
-  .post('/data',putData)
-  .delete('/data',deleteAllDone)
-  .put('/data/:id',updateDone)
-  .put('/text/:id',updateText);
+  .get('/todos',getTodos)
+  .post('/todos',postTodos)
+  .delete('/todos/checked',deleteAllChecked)
+  .delete('/todos/checked/:id',deleteCheckedById)
+  .put('/todos/:id',updateTodo);
 
 async function index(ctx){
     ctx.body = 'Hello World';
 }
 
-async function getData(ctx){
+async function getTodos(ctx){
     ctx.type = 'json';
     ctx.body = todos;
     //router.get('/:controller/:id', (ctx,next) =>{
@@ -45,7 +45,7 @@ async function getData(ctx){
     //});
 }
 
-async function putData(ctx){
+async function postTodos(ctx){
     try {
         //ctx.type = 'json';
         let todo = ctx.request.body;
@@ -60,33 +60,28 @@ async function putData(ctx){
     }
 }
 
-async function deleteAllDone(ctx){
+async function deleteAllChecked(ctx){
     console.log('start delete');
     todos = todos.filter(todo => todo.done == false);
+    console.log(todos);
     ctx.body = todos;
 }
 
-async function updateDone(ctx){
-
+async function deleteCheckedById(ctx){
+    console.log('in delete by id');
     let changeIndex = todos.indexOf(ctx.todoItem);
-    console.log(ctx.todoItem);
-    console.log('in update');
-    ctx.todoItem.done = !ctx.todoItem.done;
-    console.log(ctx.todoItem);
-    todos[changeIndex] = ctx.todoItem;
-    //console.log(todos.indexOf(ctx.todoItem.id));
-
+    todos.splice(changeIndex,1);
+    console.log('deleted entry ' + ctx.todoItem.id);
+    console.log(todos);
     ctx.body = ('ok');
-    //if(todos)
+
 }
 
-async function updateText(ctx){
+async function updateTodo(ctx){
 
     let changeIndex = todos.indexOf(ctx.todoItem);
     console.log(ctx.todoItem);
-    let sas = ctx.request.body.text;
-    console.log(sas);
-    ctx.todoItem.text = ctx.request.body.text;
+    ctx.todoItem = ctx.request.body;
     console.log(ctx.todoItem);
     todos[changeIndex] = ctx.todoItem;
     //console.log(todos.indexOf(ctx.todoItem.id));
