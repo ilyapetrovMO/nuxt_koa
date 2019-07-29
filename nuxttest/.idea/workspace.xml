@@ -4,8 +4,7 @@
     <list default="true" id="fc040286-f54c-4e2b-b6e3-2eba0ccfb4a4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../koatest/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../koatest/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../koatest/koatest.js" beforeDir="false" afterPath="$PROJECT_DIR$/../koatest/koatest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -142,16 +141,15 @@
       <option name="presentableId" value="Default" />
       <updated>1563977114851</updated>
       <workItem from="1563977116000" duration="2670000" />
-      <workItem from="1564040782208" duration="22240000" />
+      <workItem from="1564040782208" duration="22725000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24910000" />
+    <option name="totallyTimeSpent" value="25395000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="0" width="974" height="1087" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19871795" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
