@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
-    "nuxt": "^2.8.1",
+    "nuxt": "^2.15.8",
     "streaming-json-stringify": "^3.1.0"
   }
 }
